@@ -1,0 +1,30 @@
+---
+# tasks file for ranger
+- name: Install ranger file manager
+  apt: name=ranger state=present
+
+
+# Configuration
+
+- name: Makes sure conf directory exists
+  file: path="{{ansible_env.HOME}}/.config/ranger/" state=directory
+
+- name: Check if rc.conf exists
+  stat: path="{{ansible_env.HOME}}/.config/ranger/rc.conf"
+  register: rc_config_stat
+  failed_when: False
+
+- name: Backup rc.conf
+  command: mv ~/.config/ranger/rc.conf ~/.config/ranger/rc.conf.bak
+  args:
+    creates: "{{ansible_env.HOME}}/.config/ranger/rc.conf.bak"
+  when: rc_config_stat.stat.exists
+
+- name: Copy rc.conf
+  copy:
+    src: "{{ role_path }}/files/rc.conf"
+    dest: "{{ansible_env.HOME}}/.config/ranger/rc.conf"
+    owner: root
+    group: root
+    mode: 0644
+

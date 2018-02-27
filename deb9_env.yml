@@ -1,0 +1,27 @@
+- name: Prepare for Ansible
+  hosts: deb9 
+  remote_user: root
+  tasks:
+    - name: Install dependencies
+      apt: name={{ item }} state=present
+      with_items:
+        - apt-transport-https
+        - dirmngr
+  
+- name: Collecting Facts
+  hosts: deb9
+  gather_facts: yes
+
+
+- name: Set up deb9 vserver environment
+  hosts: deb9 
+  remote_user: root
+  roles:
+    - python
+    - bash
+    - tools
+    - git
+    - vim
+    - tmux
+    - ranger
+    - docker

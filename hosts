@@ -1,5 +1,5 @@
-[local]
-localhost
+[deb9]
+gb
 
-[local:vars]
-ansible_connection=local
+[deb9:vars]
+ansible_connection=ssh

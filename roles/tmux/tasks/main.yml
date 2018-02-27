@@ -1,7 +1,7 @@
 
-- import_tasks: mac.yml
+- include: mac.yml
   when: ansible_os_family == "Darwin"
-- import_tasks: debian.yml
+- include: debian.yml
   when: ansible_os_family == "Debian"
 
 # TODO: Fedora
@@ -13,20 +13,10 @@
 - name: Install tpm
   git:
     repo: https://github.com/tmux-plugins/tpm
-    dest: "{{dotfiles_user_home}}/.tmux/plugins/tpm"
+    dest: "{{ansible_env.HOME}}/.tmux/plugins/tpm"
 
-- name: Symlink .tmux.conf
-  file:
-    src: "{{ dotfiles_home }}/roles/tmux/files/tmux.conf"
-    dest: "{{dotfiles_user_home}}/.tmux.conf"
-    state: link
-  when: ansible_os_family != "Darwin"
+- name: Copy .tmux.conf
+  copy:
+    src: tmux.conf
+    dest: "{{ansible_env.HOME}}/.tmux.conf"
 
-# On macOS, use the same tmux.conf, but also use
-# reattach_to_user_namespace (for clipboard support)
-- name: Symlink .tmux.conf (macOS)
-  file:
-    src: "{{ dotfiles_home }}/roles/tmux/files/tmux-mac.conf"
-    dest: "{{dotfiles_user_home}}/.tmux.conf"
-    state: link
-  when: ansible_os_family == "Darwin"

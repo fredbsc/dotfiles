@@ -1,3 +1,2 @@
 - name: Install vim with apt
-  apt: name=vim state=latest
-  become_method: sudo
+  apt: name=vim-nox state=latest
